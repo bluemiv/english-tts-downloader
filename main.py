@@ -28,7 +28,7 @@ if __name__ == '__main__':
     assert os.path.exists(DATA_PATH), f"Not found data file. data file path: {DATA_PATH}"
     data = read_json_file(DATA_PATH)
 
-    chrome_download_path = config["chrome_download_path"]
+    chrome_download_path = os.path.abspath("./")
     assert os.path.exists(chrome_download_path), f"Not found chrome download path. {chrome_download_path}"
 
     download_dir_path = os.path.join(chrome_download_path, 'tts')
