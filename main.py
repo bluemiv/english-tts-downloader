@@ -52,7 +52,7 @@ if __name__ == '__main__':
         driver.get(TTS_URL)
 
         sprachwahl_select = Select(driver.find_element(By.ID, 'sprachwahl'))
-        sprachwahl_select.select_by_value(config['voice'])
+        sprachwahl_select.select_by_value(config['voice'])  # female: Salli, Justin, Joanna, Kendra / male: Joey, Matthew
 
         words = data['words']
         words_len = len(words)
