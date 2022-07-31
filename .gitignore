@@ -2,4 +2,12 @@
 **/.vs_code
 **/.DS_store
 
+**/tts
 **/venv
+**/chromedriver
+
+**/config.json
+**/data.json
+
+**/sample*
+**/result*
