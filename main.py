@@ -8,6 +8,7 @@ import traceback
 
 import chromedriver_autoinstaller
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 TTS_URL = 'https://ttsmp3.com/'
@@ -42,7 +43,9 @@ if __name__ == '__main__':
         chromedriver_autoinstaller.install(True)
 
     try:
-        driver = webdriver.Chrome(driver_path)
+        options = Options()
+        options.headless = True
+        driver = webdriver.Chrome(driver_path, options=options)
 
         # set word
         driver.get(TTS_URL)
@@ -61,7 +64,7 @@ if __name__ == '__main__':
 
             # file renaming
             while True:
-                time.sleep(1)
+                time.sleep(0.5)
                 find_file = False
                 files = os.listdir(chrome_download_path)
                 target_file_path = ''
@@ -73,6 +76,7 @@ if __name__ == '__main__':
                     if not find_file and re.match(r'.+/ttsMP3\.com.+', full_path):
                         shutil.move(full_path, target_file_path)
                         find_file = True
+                        time.sleep(0.5)
                         break
 
                 if find_file and target_file_path != '' and os.path.exists(target_file_path):
