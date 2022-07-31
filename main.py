@@ -32,8 +32,6 @@ if __name__ == '__main__':
     assert os.path.exists(chrome_download_path), f"Not found chrome download path. {chrome_download_path}"
 
     download_dir_path = os.path.join(chrome_download_path, 'tts')
-    if os.path.exists(download_dir_path):
-        shutil.rmtree(download_dir_path)
 
     chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
     driver_path = os.path.abspath(f'./{chrome_ver}/chromedriver')
@@ -53,12 +51,10 @@ if __name__ == '__main__':
         words = data['words']
         words_len = len(words)
         for idx, word in enumerate(words):
-            if idx % 500 == 0:
-                # browser reload
-                driver.close()
-                driver = webdriver.Chrome(driver_path, options=options)
-                driver.get(TTS_URL)
-                driver.implicitly_wait(1)
+            target_file_path = f'{os.path.join(download_dir_path, word)}.mp3'
+            if os.path.exists(target_file_path):
+                print(f'[{idx + 1}/{words_len}] Already downloaded. {word} (path: {target_file_path})')
+                continue
 
             voiceText = driver.find_element(By.ID, 'voicetext')
             voiceText.send_keys(word)
@@ -75,12 +71,8 @@ if __name__ == '__main__':
                 time.sleep(0.5)
                 find_file = False
                 files = os.listdir(chrome_download_path)
-                target_file_path = ''
                 for file in files:
                     full_path = os.path.join(chrome_download_path, file)
-                    ext = full_path.split('.')[-1]
-                    target_file_path = f'{os.path.join(download_dir_path, word)}.{ext}'
-
                     if not find_file and re.match(r'.+/ttsMP3\.com.+', full_path) and 'crdownload' not in full_path:
                         shutil.move(full_path, target_file_path)
                         find_file = True
@@ -88,7 +80,7 @@ if __name__ == '__main__':
                         break
 
                 if find_file and target_file_path != '' and os.path.exists(target_file_path):
-                    print(f'[{idx + 1}/{words_len}]Download success. {word} (path: {target_file_path})')
+                    print(f'[{idx + 1}/{words_len}] Download success. {word} (path: {target_file_path})')
                     break
 
             voiceText.clear()
