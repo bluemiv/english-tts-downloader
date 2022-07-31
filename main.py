@@ -59,16 +59,24 @@ if __name__ == '__main__':
             if not os.path.exists(download_dir_path):
                 os.mkdir(download_dir_path)
 
-            time.sleep(config['download_delay'])
-
             # file renaming
-            files = os.listdir(chrome_download_path)
-            for file in files:
-                full_path = os.path.join(chrome_download_path, file)
-                ext = full_path.split('.')[-1]
+            while True:
+                time.sleep(1)
+                find_file = False
+                files = os.listdir(chrome_download_path)
+                target_file_path = ''
+                for file in files:
+                    full_path = os.path.join(chrome_download_path, file)
+                    ext = full_path.split('.')[-1]
+                    target_file_path = f'{os.path.join(download_dir_path, word)}.{ext}'
 
-                if re.match(r'.+/ttsMP3\.com.+', full_path):
-                    shutil.move(full_path, f'{os.path.join(download_dir_path, word)}.{ext}')
+                    if not find_file and re.match(r'.+/ttsMP3\.com.+', full_path):
+                        shutil.move(full_path, target_file_path)
+                        find_file = True
+                        break
+
+                if find_file and target_file_path != '' and os.path.exists(target_file_path):
+                    print(f'Download success. {word} (path: {target_file_path})')
                     break
 
             voiceText.clear()
