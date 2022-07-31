@@ -53,6 +53,12 @@ if __name__ == '__main__':
         words = data['words']
         words_len = len(words)
         for idx, word in enumerate(words):
+            if idx % 500 == 0:
+                # browser reload
+                driver.close()
+                driver = webdriver.Chrome(driver_path, options=options)
+                driver.get(TTS_URL)
+                driver.implicitly_wait(1)
 
             voiceText = driver.find_element(By.ID, 'voicetext')
             voiceText.send_keys(word)
