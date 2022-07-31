@@ -50,7 +50,9 @@ if __name__ == '__main__':
         # set word
         driver.get(TTS_URL)
 
-        for word in data['words']:
+        words = data['words']
+        words_len = len(words)
+        for idx, word in enumerate(words):
 
             voiceText = driver.find_element(By.ID, 'voicetext')
             voiceText.send_keys(word)
@@ -73,17 +75,18 @@ if __name__ == '__main__':
                     ext = full_path.split('.')[-1]
                     target_file_path = f'{os.path.join(download_dir_path, word)}.{ext}'
 
-                    if not find_file and re.match(r'.+/ttsMP3\.com.+', full_path):
+                    if not find_file and re.match(r'.+/ttsMP3\.com.+', full_path) and 'crdownload' not in full_path:
                         shutil.move(full_path, target_file_path)
                         find_file = True
                         time.sleep(0.5)
                         break
 
                 if find_file and target_file_path != '' and os.path.exists(target_file_path):
-                    print(f'Download success. {word} (path: {target_file_path})')
+                    print(f'[{idx + 1}/{words_len}]Download success. {word} (path: {target_file_path})')
                     break
 
             voiceText.clear()
+            time.sleep(0.1)
 
     except Exception:
         print(traceback.format_exc())
