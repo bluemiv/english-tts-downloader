@@ -3,6 +3,7 @@ import json
 import os
 import re
 import shutil
+import sys
 import time
 import traceback
 
@@ -10,6 +11,8 @@ import chromedriver_autoinstaller
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
+
 
 TTS_URL = 'https://ttsmp3.com/'
 CONFIG_PATH = os.path.abspath("./config.json")
@@ -47,6 +50,9 @@ if __name__ == '__main__':
 
         # set word
         driver.get(TTS_URL)
+
+        sprachwahl_select = Select(driver.find_element(By.ID, 'sprachwahl'))
+        sprachwahl_select.select_by_value(config['voice'])
 
         words = data['words']
         words_len = len(words)
